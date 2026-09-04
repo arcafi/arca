@@ -7,8 +7,8 @@ export const VAULT_ADDRESS = "0x04f4F5b8572d0b925557BE9F42C92B9Edce9F628" as con
 export const RPC_URL = "https://rpc.mainnet.chain.robinhood.com";
 
 // One-click zap (USDG <-> index), deployed 22 Jul 2026. Zap tab hides itself if ever emptied.
-// Arca zapper — redeploying; empty string hides the Zap tab until the new one is live
-export const ZAPPER_ADDRESS = "" as `0x${string}` | "";
+// Arca zapper — one-click USDG <-> index. Zap tab hides itself if ever emptied.
+export const ZAPPER_ADDRESS = "0x1942E2548bf262343be39fdFafa02508af567938" as `0x${string}` | "";
 export const USDG_ADDRESS = "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168" as const;
 export const USDG_DECIMALS = 6;
 

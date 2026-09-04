@@ -44,7 +44,8 @@ contract DeployArcaZapper is Script {
                 })
             );
         }
-        if (owner != broadcaster) zapRouter.transferOwnership(owner);
+        // ARCA_OWNER=0 means "keep the deployer as owner" (owner == deployer); never transfer to zero
+        if (owner != address(0) && owner != broadcaster) zapRouter.transferOwnership(owner);
 
         ArcaZapper zapper = new ArcaZapper(IArcaVault(vault), IERC20(usdg), IZapRouter(address(zapRouter)));
 

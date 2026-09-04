@@ -42,11 +42,11 @@ export default function Contracts() {
           ],
           [
             <span key="z"><b>ArcaZapper</b> — one-click USDG in/out (periphery, no vault powers)</span>,
-            <span key="za" className="text-muted">redeploying ↻</span>,
+            <A key="za" path="address/0x1942E2548bf262343be39fdFafa02508af567938">{short("0x1942E2548bf262343be39fdFafa02508af567938")} ↗</A>,
           ],
           [
             <span key="zr"><b>ArcaZapRouter</b> — exact-out/in v4 adapter for the zapper</span>,
-            <span key="zra" className="text-muted">redeploying ↻</span>,
+            <A key="zra" path="address/0xc7445Ade2A05dd38C27bE5F3c5628c956bb52cef">{short("0xc7445Ade2A05dd38C27bE5F3c5628c956bb52cef")} ↗</A>,
           ],
         ]}
       />
