@@ -1,0 +1,29 @@
+# --- internal, NOT published (strategy, teardowns, dev process) ---
+research/
+AGENTS.md
+META.md
+# the private rebalancer strategy (repo root only — NOT the web /agent route)
+/agent/
+__pycache__/
+
+# local env / OS
+.env
+.env.*
+!.env.example
+# Arca deploy env (real role addresses) — never commit; only *.example is tracked
+frontier.env
+*.env
+!*.env.example
+.DS_Store
+*.log
+
+# heavy raster logo sources (repo stays vector-only)
+
+# Foundry build output
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# local editor config + brand scratch — not part of the public repo
+.claude/
+brand/

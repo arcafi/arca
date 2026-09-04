@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* Arca brand tokens — olive + cream.
+   Token NAMES are kept from the previous system on purpose: every page recolors
+   at once, no className churn. Only the values changed (Arca green/ink -> Arca olive/cream). */
+@theme {
+  --color-canvas: #f4ede6;      /* cream — page background */
+  --color-cream-2: #ece2d5;     /* raised cream — subtle cards / bands */
+  --color-ink: #262c1b;         /* deep olive-black — primary text & dark buttons */
+  --color-olive: #465626;       /* brand olive */
+  --color-green: #55692b;       /* accent (live / verify highlights) — name kept */
+  --color-green-deep: #3c4b1f;  /* deeper accent — links, hovers */
+  --color-muted: #7d7c64;       /* warm olive-gray — secondary text */
+  --color-hair: #e2d8ca;        /* warm hairline on cream */
+  --color-dark: #2a331b;        /* deep olive — dark sections background */
+  --color-dark-hair: #43512d;   /* hairline on dark olive */
+
+  --font-display: var(--font-display), "Fraunces", Georgia, serif;
+  --font-body: var(--font-body), "Hanken Grotesk", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "IBM Plex Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-canvas);
+}
+
+/* Lenis drives scrolling when active — native smooth would double-ease */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* anchor jumps clear the floating pill nav */
+:where(section, header)[id] {
+  scroll-margin-top: 6rem;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* tabular numerals for data/money */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* soft organic paper grain — the farm-minerals warmth, kept very subtle */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* ---- ticker marquee (backed-by strip) ---- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 42s linear infinite;
+}
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-mask:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* ---- marching dashes (how-it-works flow arrows) ---- */
+@keyframes dashflow {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+.dash-anim {
+  stroke-dasharray: 7 7;
+  animation: dashflow 0.9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .dash-anim {
+    animation: none;
+  }
+}
