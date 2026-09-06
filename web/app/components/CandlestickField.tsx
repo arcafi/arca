@@ -22,8 +22,9 @@ function Field({ progress }: { progress: { current: number } }) {
     const arr: { x: number; z: number; h: number; c: THREE.Color }[] = [];
     const c = new THREE.Color();
     for (let i = 0; i < COUNT; i++) {
-      const x = (Math.random() - 0.5) * 30;
-      const z = -2 - Math.random() * 122;
+      let x = (Math.random() - 0.5) * 30;
+      if (Math.abs(x) < 3.2) x += x < 0 ? -3.2 : 3.2; // keep the flight lane clear so no bar clips the camera
+      const z = -4 - Math.random() * 104; // field ends at ~-108
       const h = 1.4 + Math.random() * 10;
       const t = Math.min(1, h / 11);
       c.setRGB(0.26 + 0.42 * t, 0.4 + 0.34 * t, 0.13 + 0.14 * t); // olive -> sage by height
@@ -49,7 +50,7 @@ function Field({ progress }: { progress: { current: number } }) {
 
   useFrame((s) => {
     const p = progress.current;
-    s.camera.position.z = 16 - p * 132;
+    s.camera.position.z = 16 - p * 146; // ends at ~-130, well past the last bar (~-108): a clean exit, no stuck bar
     s.camera.position.y = 0.6 + Math.sin(p * Math.PI) * 1.6;
     s.camera.position.x = Math.sin(p * Math.PI * 2) * 1.2;
     s.camera.lookAt(0, 0, s.camera.position.z - 20);
