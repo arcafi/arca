@@ -13,8 +13,9 @@ import dynamic from "next/dynamic";
 import { Logo } from "./Logo";
 import type { VaultData, LatestRebalance, LedgerRow } from "../lib/vault";
 
-// 3D vault hero — client-only (three.js can't SSR)
+// 3D pieces — client-only (three.js can't SSR)
 const VaultCanvas = dynamic(() => import("./VaultCanvas").then((m) => m.VaultCanvas), { ssr: false });
+const CandlestickField = dynamic(() => import("./CandlestickField").then((m) => m.CandlestickField), { ssr: false });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -946,6 +947,7 @@ export function Landing({
       <Hero rebalance={rebalance} />
       <Ticker />
       <LiveVault data={vault} />
+      <CandlestickField />
       <Lore />
       <How />
       <Baskets vault={vault} />

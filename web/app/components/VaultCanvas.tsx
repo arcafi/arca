@@ -1,12 +1,11 @@
 "use client";
 
-/* The Arca vault — a metallic box with a candlestick through it, on a starfield.
-   Idles, tilts toward the cursor, and spins as you scroll. Built with
-   react-three-fiber so React lifecycle / StrictMode / the render loop are handled
-   for us. Imported with ssr:false (three.js can't SSR). */
+/* The Arca vault — an OPEN strongbox (the logo mark in 3D): four walls + floor,
+   two lid flaps thrown open, cream edge-lines, and the index glowing inside as a
+   candlestick. Idles, tilts to the cursor, spins on scroll. r3f, ssr:false. */
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 
 type Input = { mx: number; my: number; tmx: number; tmy: number; scrollP: number };
@@ -32,11 +31,36 @@ function useInput() {
   return state;
 }
 
-function VaultGroup({ reduce }: { reduce: boolean }) {
+/* one metal panel + its cream edge lines (the logo's line quality) */
+function Panel({
+  size,
+  position,
+  rotation,
+  color = "#7c8a49",
+}: {
+  size: [number, number, number];
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  color?: string;
+}) {
+  const geo = useMemo(() => new THREE.BoxGeometry(size[0], size[1], size[2]), [size]);
+  const edges = useMemo(() => new THREE.EdgesGeometry(geo), [geo]);
+  return (
+    <mesh geometry={geo} position={position} rotation={rotation}>
+      <meshStandardMaterial color={color} metalness={0.55} roughness={0.34} />
+      <lineSegments geometry={edges}>
+        <lineBasicMaterial color="#e7dfcf" transparent opacity={0.4} />
+      </lineSegments>
+    </mesh>
+  );
+}
+
+function Vault({ reduce }: { reduce: boolean }) {
   const group = useRef<THREE.Group>(null);
   const input = useInput();
-  const boxGeo = useMemo(() => new THREE.BoxGeometry(2.5, 2.5, 2.5), []);
-  const edgeGeo = useMemo(() => new THREE.EdgesGeometry(boxGeo), [boxGeo]);
+  const S = 2.4; // inner box size
+  const T = 0.16; // wall thickness
+  const h = S / 2;
 
   useFrame((s) => {
     const g = group.current;
@@ -45,36 +69,39 @@ function VaultGroup({ reduce }: { reduce: boolean }) {
     st.mx += (st.tmx - st.mx) * 0.06;
     st.my += (st.tmy - st.my) * 0.06;
     const t = s.clock.elapsedTime;
-    const idle = reduce ? 0 : t * 0.35;
+    const idle = reduce ? 0 : t * 0.32;
     g.rotation.y = idle + st.scrollP * Math.PI * 1.4 + st.mx * 0.5;
-    g.rotation.x = -0.16 + (reduce ? 0 : Math.sin(t * 0.6) * 0.05) + st.my * 0.35 + st.scrollP * 0.25;
-    s.camera.position.z = 8.4 - st.scrollP * 1.2;
+    g.rotation.x = -0.12 + (reduce ? 0 : Math.sin(t * 0.6) * 0.05) + st.my * 0.32 + st.scrollP * 0.25;
+    s.camera.position.z = 9 - st.scrollP * 1.2;
   });
 
   return (
-    <group ref={group}>
-      {/* the vault */}
-      <mesh geometry={boxGeo}>
-        <meshStandardMaterial color="#9aa869" metalness={0.5} roughness={0.32} />
-        <lineSegments geometry={edgeGeo}>
-          <lineBasicMaterial color="#efe7d8" transparent opacity={0.5} />
-        </lineSegments>
+    <group ref={group} position={[0, -0.15, 0]}>
+      {/* box body — floor + 4 walls, open top */}
+      <Panel size={[S + T, T, S + T]} position={[0, -h, 0]} />
+      <Panel size={[S + T, S, T]} position={[0, 0, -h]} />
+      <Panel size={[S + T, S, T]} position={[0, 0, h]} />
+      <Panel size={[T, S, S + T]} position={[-h, 0, 0]} />
+      <Panel size={[T, S, S + T]} position={[h, 0, 0]} />
+
+      {/* two lids thrown open (hinged at the top front/back edges) */}
+      <group position={[0, h, -h]} rotation={[-1.18, 0, 0]}>
+        <Panel size={[S + T, T, S * 0.7]} position={[0, 0, -S * 0.35]} color="#93a35c" />
+      </group>
+      <group position={[0, h, h]} rotation={[1.18, 0, 0]}>
+        <Panel size={[S + T, T, S * 0.7]} position={[0, 0, S * 0.35]} color="#93a35c" />
+      </group>
+
+      {/* the index, glowing inside the open vault */}
+      <mesh position={[0, 0.15, 0]}>
+        <boxGeometry args={[0.5, 2.3, 0.5]} />
+        <meshStandardMaterial color="#d4e28c" metalness={0.3} roughness={0.3} emissive="#8fb03a" emissiveIntensity={0.8} />
       </mesh>
-      {/* lid seam */}
-      <mesh position={[0, 1.28, 0]}>
-        <boxGeometry args={[2.62, 0.14, 2.62]} />
-        <meshStandardMaterial color="#8b9a5c" metalness={0.5} roughness={0.3} />
+      <mesh position={[0, 0.15, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 3.2, 10]} />
+        <meshStandardMaterial color="#eef3d2" metalness={0.3} roughness={0.3} emissive="#8fb03a" emissiveIntensity={0.5} />
       </mesh>
-      {/* candlestick body */}
-      <mesh position={[0.15, 0.1, 1.35]}>
-        <boxGeometry args={[0.62, 3.0, 0.62]} />
-        <meshStandardMaterial color="#cfe08a" metalness={0.4} roughness={0.3} emissive="#7a9a2e" emissiveIntensity={0.6} />
-      </mesh>
-      {/* wick */}
-      <mesh position={[0.15, 0.1, 1.35]}>
-        <cylinderGeometry args={[0.045, 0.045, 4.4, 12]} />
-        <meshStandardMaterial color="#dfe8bf" metalness={0.4} roughness={0.3} />
-      </mesh>
+      <pointLight position={[0, 0.6, 0]} intensity={2.2} distance={6} color="#c8e06a" />
     </group>
   );
 }
@@ -103,19 +130,27 @@ function Stars() {
   );
 }
 
+function Scene({ children }: { children: ReactNode }) {
+  return (
+    <Canvas camera={{ position: [0, 0.2, 9], fov: 38 }} gl={{ alpha: true, antialias: true }} dpr={[1, 2]}>
+      <ambientLight intensity={0.75} color="#ece3d0" />
+      <directionalLight intensity={3.0} color="#fff4dc" position={[4, 6, 6]} />
+      <pointLight intensity={2.8} color="#9fc06a" position={[-6, -1, 4]} distance={40} />
+      <pointLight intensity={0.7} color="#bfd0ff" position={[3, -4, -2]} distance={40} />
+      {children}
+    </Canvas>
+  );
+}
+
 export function VaultCanvas() {
   const reduce =
     typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return (
     <div className="pointer-events-none absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 0.2, 8.4], fov: 38 }} gl={{ alpha: true, antialias: true }} dpr={[1, 2]}>
-        <ambientLight intensity={0.85} color="#ece3d0" />
-        <directionalLight intensity={3.0} color="#fff4dc" position={[4, 6, 6]} />
-        <pointLight intensity={3.2} color="#9fc06a" position={[-6, -1, 4]} distance={40} />
-        <pointLight intensity={0.8} color="#bfd0ff" position={[3, -4, -2]} distance={40} />
-        <VaultGroup reduce={reduce} />
+      <Scene>
+        <Vault reduce={reduce} />
         <Stars />
-      </Canvas>
+      </Scene>
     </div>
   );
 }
