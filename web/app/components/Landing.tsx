@@ -6,13 +6,15 @@ import {
   animate,
   useInView,
   useReducedMotion,
-  useScroll,
-  useTransform,
   type Variants,
 } from "framer-motion";
 import { Fragment, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { Logo } from "./Logo";
 import type { VaultData, LatestRebalance, LedgerRow } from "../lib/vault";
+
+// 3D vault hero — client-only (three.js can't SSR)
+const VaultCanvas = dynamic(() => import("./VaultCanvas").then((m) => m.VaultCanvas), { ssr: false });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -47,10 +49,12 @@ function SplitWords({
   words,
   className,
   delay = 0,
+  accentClass = "italic text-olive",
 }: {
   words: { t: string; accent?: boolean }[];
   className?: string;
   delay?: number;
+  accentClass?: string;
 }) {
   return (
     <span className={className}>
@@ -63,7 +67,7 @@ function SplitWords({
               whileInView={delay < 0 ? { y: 0, rotate: 0, opacity: 1 } : undefined}
               viewport={delay < 0 ? { once: true, margin: "-80px" } : undefined}
               transition={{ duration: 0.9, ease, delay: Math.abs(delay) + i * 0.07 }}
-              className={`inline-block origin-bottom-left ${w.accent ? "italic text-olive" : ""}`}
+              className={`inline-block origin-bottom-left ${w.accent ? accentClass : ""}`}
             >
               {w.t}
             </motion.span>
@@ -244,121 +248,111 @@ function Nav() {
 
 function Hero({ rebalance }: { rebalance: LatestRebalance }) {
   return (
-    <header id="top" className="grain relative overflow-hidden">
-      {/* faint warm grid, fading into the page */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.6]"
-        style={{
-          backgroundImage:
-            "linear-gradient(var(--color-hair) 1px, transparent 1px), linear-gradient(90deg, var(--color-hair) 1px, transparent 1px)",
-          backgroundSize: "46px 46px",
-          maskImage: "radial-gradient(120% 88% at 50% 0%, #000 38%, transparent 76%)",
-          WebkitMaskImage: "radial-gradient(120% 88% at 50% 0%, #000 38%, transparent 76%)",
-        }}
-      />
-      {/* soft olive light welling up from the floor of the box */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%]"
-        style={{
-          background:
-            "radial-gradient(80% 100% at 50% 120%, color-mix(in srgb, var(--color-olive) 26%, transparent), transparent 70%)",
-        }}
-      />
-
-      <HeroParallax>
-        <motion.div variants={container} initial="hidden" animate="show">
-          <motion.p
-            initial={{ opacity: 0, letterSpacing: "0.5em" }}
-            animate={{ opacity: 1, letterSpacing: "0.2em" }}
-            transition={{ duration: 1.1, ease, delay: 0.15 }}
-            className="font-mono text-[12px] uppercase text-muted"
-          >
-            the vault that guards itself · on Robinhood Chain
-          </motion.p>
-
-          <h1 className="mx-auto mt-6 max-w-[15ch] font-display text-[clamp(2.9rem,7vw,5.4rem)] font-semibold leading-[1.0] tracking-[-0.025em]">
-            <SplitWords
-              delay={0.35}
-              words={[{ t: "The" }, { t: "vault" }, { t: "that" }, { t: "guards", accent: true }, { t: "itself.", accent: true }]}
-            />
-          </h1>
-
-          <motion.p variants={fadeUp} className="mx-auto mt-7 max-w-[54ch] text-[18px] leading-relaxed text-ink/75">
-            Arca is a fully-backed stock index on Robinhood Chain. One token holds a whole basket
-            of tokenized stocks. An autonomous agent rebalances it — and can never withdraw a cent.
-            Don&apos;t trust; look inside.
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href="/app"
-              className="rounded-full bg-ink px-6 py-3 font-body text-[15px] font-medium text-canvas transition-transform hover:-translate-y-px"
-            >
-              Launch the app
-            </a>
-            <a
-              href="#lore"
-              className="rounded-full border border-ink/15 bg-canvas/60 px-6 py-3 font-body text-[15px] font-medium text-ink transition-colors hover:border-ink/40"
-            >
-              Read the lore
-            </a>
-          </motion.div>
+    <header id="top" className="px-3 pt-20 sm:px-4 sm:pt-24">
+      {/* the hybrid: a dark 3D "stage" inset in the cream page */}
+      <div className="mx-auto max-w-[1200px]">
+        <div
+          className="relative grid overflow-hidden rounded-[28px] border border-stage-line shadow-[0_40px_90px_-50px_rgba(20,25,10,0.7)] md:grid-cols-[1.05fr_0.95fr]"
+          style={{
+            minHeight: "min(82vh, 720px)",
+            background:
+              "radial-gradient(120% 90% at 78% 40%, color-mix(in srgb, var(--color-olive) 34%, transparent), transparent 60%), linear-gradient(160deg, var(--color-stage-1), var(--color-stage-2))",
+          }}
+        >
+          <VaultCanvas />
 
           <motion.div
-            variants={fadeUp}
-            className="mt-7 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 font-mono text-[12.5px] text-muted"
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="relative z-10 max-w-[600px] self-center px-7 py-14 sm:px-12"
           >
-            <span className="inline-flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-olive opacity-60 motion-safe:animate-ping" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-olive" />
-              </span>
-              live on mainnet
-            </span>
-            <span className="text-hair">·</span>
-            <Ext
-              href={LINKS.vault}
-              className="inline-flex items-center gap-2 rounded-full border border-hair bg-canvas/70 px-3 py-1.5 transition-colors hover:border-ink/30"
+            <motion.p
+              initial={{ opacity: 0, letterSpacing: "0.5em" }}
+              animate={{ opacity: 1, letterSpacing: "0.16em" }}
+              transition={{ duration: 1.1, ease, delay: 0.15 }}
+              className="font-mono text-[11.5px] uppercase text-sage"
             >
-              vault <span className="text-ink">{short(VAULT)}</span>
-              <span className="text-green-deep">↗</span>
-            </Ext>
+              the vault that guards itself · on Robinhood Chain
+            </motion.p>
+
+            <h1 className="mt-4 font-display text-[clamp(2.6rem,5.6vw,4.4rem)] font-semibold leading-[1.0] tracking-[-0.025em] text-stage-cream">
+              <SplitWords
+                delay={0.35}
+                accentClass="italic text-sage"
+                words={[{ t: "The" }, { t: "vault" }, { t: "that" }, { t: "guards", accent: true }, { t: "itself.", accent: true }]}
+              />
+            </h1>
+
+            <motion.p variants={fadeUp} className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-stage-cream/75">
+              A fully-backed stock index on Robinhood Chain. One token holds a whole basket of
+              tokenized stocks. An autonomous agent rebalances it — and can never withdraw a cent.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href="/app"
+                className="rounded-full bg-stage-cream px-6 py-3 font-body text-[15px] font-medium text-ink transition-transform hover:-translate-y-px"
+              >
+                Launch the app
+              </a>
+              <a
+                href="#lore"
+                className="rounded-full border border-stage-cream/25 px-6 py-3 font-body text-[15px] font-medium text-stage-cream transition-colors hover:border-stage-cream/60"
+              >
+                Read the lore
+              </a>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-7 flex flex-wrap items-center gap-x-2 gap-y-2 font-mono text-[12.5px] text-stage-cream/70"
+            >
+              <span className="inline-flex items-center gap-2">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-sage opacity-60 motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-sage" />
+                </span>
+                live on mainnet
+              </span>
+              <span className="text-stage-line">·</span>
+              <Ext
+                href={LINKS.vault}
+                className="inline-flex items-center gap-2 rounded-full border border-stage-cream/15 px-3 py-1.5 transition-colors hover:border-stage-cream/40"
+              >
+                vault <span className="text-stage-cream">{short(VAULT)}</span>
+                <span className="text-sage">↗</span>
+              </Ext>
+            </motion.div>
           </motion.div>
-        </motion.div>
 
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-6 right-6 z-10 hidden text-right font-mono text-[11.5px] tracking-[0.08em] text-stage-cream/55 sm:block"
+          >
+            the vault · <span className="text-sage">sealed by code</span>
+          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-5 left-7 z-10 hidden items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-stage-cream/50 sm:left-12 sm:flex"
+          >
+            scroll
+            <span className="relative block h-6 w-px overflow-hidden bg-stage-line">
+              <motion.span
+                animate={{ y: ["-100%", "220%"] }}
+                transition={{ duration: 1.7, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute left-0 top-0 h-1/2 w-px bg-sage"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* on-chain receipt — cream, right under the dark stage */}
+      <div className="mx-auto max-w-[1200px] px-4">
         <Receipt rebalance={rebalance} />
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-          className="mt-14 flex flex-col items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.22em] text-muted"
-          aria-hidden
-        >
-          scroll
-          <span className="relative h-9 w-px overflow-hidden bg-hair">
-            <motion.span
-              animate={{ y: ["-100%", "220%"] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute left-0 top-0 h-1/2 w-px bg-olive"
-            />
-          </span>
-        </motion.div>
-      </HeroParallax>
+      </div>
     </header>
-  );
-}
-
-function HeroParallax({ children }: { children: React.ReactNode }) {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 0.1], [0, -40]);
-  const opacity = useTransform(scrollYProgress, [0, 0.12], [1, 0.88]);
-  return (
-    <motion.div style={{ y, opacity }} className="relative mx-auto max-w-[980px] px-6 pt-44 pb-16 text-center">
-      {children}
-    </motion.div>
   );
 }
 

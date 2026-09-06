@@ -15,6 +15,13 @@
   --color-dark: #2a331b;        /* deep olive — dark sections background */
   --color-dark-hair: #43512d;   /* hairline on dark olive */
 
+  /* 3D hero "stage" — the dark zone the vault lives in (hybrid look) */
+  --color-stage-1: #1a2010;     /* stage gradient top */
+  --color-stage-2: #0c0f07;     /* stage gradient bottom (near-black warm) */
+  --color-stage-line: #37421f;  /* stage border */
+  --color-sage: #a9c06a;        /* accent that reads on the dark stage */
+  --color-stage-cream: #efe7d8; /* cream text on the dark stage */
+
   --font-display: var(--font-display), "Fraunces", Georgia, serif;
   --font-body: var(--font-body), "Hanken Grotesk", system-ui, sans-serif;
   --font-mono: var(--font-mono), "IBM Plex Mono", monospace;
