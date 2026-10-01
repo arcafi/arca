@@ -1,54 +1,54 @@
 {
- "updated": 1790730925,
+ "updated": 1790818363,
  "chainId": 4663,
  "quote": "USDG",
  "venue": "Uniswap v4",
  "summary": {
   "total": 14,
-  "tradeable": 0,
+  "tradeable": 3,
   "thin": 0,
   "dead": 1,
-  "none": 13
+  "none": 10
  },
  "stocks": [
+  {
+   "sym": "TSLA",
+   "token": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
+   "fee": 3000,
+   "spread": 0.39,
+   "impact10": 0.1,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "Tesla"
+  },
   {
    "sym": "NVDA",
    "token": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
    "fee": 3000,
    "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "dead",
+   "impact10": 0.2,
+   "twoWay": "deep",
+   "status": "tradeable",
    "name": "NVIDIA"
   },
   {
    "sym": "MSFT",
    "token": "0xe93237C50D904957Cf27E7B1133b510C669c2e74",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
+   "fee": 3000,
+   "spread": 0.3,
+   "impact10": 0.2,
+   "twoWay": "deep",
+   "status": "tradeable",
    "name": "Microsoft"
-  },
-  {
-   "sym": "TSLA",
-   "token": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
-   "name": "Tesla"
   },
   {
    "sym": "GOOGL",
    "token": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
-   "fee": null,
+   "fee": 3000,
    "spread": null,
    "impact10": null,
    "twoWay": "none",
-   "status": "none",
+   "status": "dead",
    "name": "Alphabet"
   },
   {
