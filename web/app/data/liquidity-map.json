@@ -1,21 +1,21 @@
 {
- "updated": 1791171254,
+ "updated": 1791257953,
  "chainId": 4663,
  "quote": "USDG",
  "venue": "Uniswap v4",
  "summary": {
   "total": 14,
-  "tradeable": 7,
+  "tradeable": 12,
   "thin": 1,
-  "dead": 1,
-  "none": 5
+  "dead": 0,
+  "none": 1
  },
  "stocks": [
   {
    "sym": "SPY",
    "token": "0x117cc2133c37B721F49dE2A7a74833232B3B4C0C",
    "fee": 3000,
-   "spread": 0.24,
+   "spread": 0.18,
    "impact10": 0.0,
    "twoWay": "deep",
    "status": "tradeable",
@@ -25,101 +25,121 @@
    "sym": "META",
    "token": "0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35",
    "fee": 3000,
-   "spread": 0.33,
+   "spread": 0.21,
    "impact10": 0.0,
    "twoWay": "deep",
    "status": "tradeable",
    "name": "Meta"
   },
   {
-   "sym": "NVDA",
-   "token": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
-   "fee": 3000,
-   "spread": 0.33,
-   "impact10": 0.1,
-   "twoWay": "deep",
-   "status": "tradeable",
-   "name": "NVIDIA"
-  },
-  {
    "sym": "TSLA",
    "token": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
    "fee": 3000,
-   "spread": 0.07,
+   "spread": 0.16,
    "impact10": 0.1,
    "twoWay": "deep",
    "status": "tradeable",
    "name": "Tesla"
   },
   {
-   "sym": "MSFT",
-   "token": "0xe93237C50D904957Cf27E7B1133b510C669c2e74",
+   "sym": "GOOGL",
+   "token": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
    "fee": 3000,
-   "spread": 0.25,
-   "impact10": 0.2,
+   "spread": 0.61,
+   "impact10": 0.1,
    "twoWay": "deep",
    "status": "tradeable",
-   "name": "Microsoft"
+   "name": "Alphabet"
   },
   {
-   "sym": "SPCX",
-   "token": "0x4a0E65A3EcceC6dBe60AE065F2e7bb85Fae35eEa",
+   "sym": "AAPL",
+   "token": "0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9",
+   "fee": 3000,
+   "spread": null,
+   "impact10": 0.1,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "Apple"
+  },
+  {
+   "sym": "AMD",
+   "token": "0x86923f96303D656E4aa86D9d42D1e57ad2023fdC",
    "fee": 10000,
-   "spread": 0.45,
+   "spread": 0.49,
+   "impact10": 0.1,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "AMD"
+  },
+  {
+   "sym": "PLTR",
+   "token": "0x894E1EC2D74FFE5AEF8Dc8A9e84686acCB964F2A",
+   "fee": 10000,
+   "spread": 1.38,
+   "impact10": 0.1,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "Palantir"
+  },
+  {
+   "sym": "NVDA",
+   "token": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+   "fee": 3000,
+   "spread": 0.1,
    "impact10": 0.2,
    "twoWay": "deep",
    "status": "tradeable",
-   "name": "SpaceX"
+   "name": "NVIDIA"
   },
   {
    "sym": "COIN",
    "token": "0x6330D8C3178a418788dF01a47479c0ce7CCF450b",
    "fee": 10000,
-   "spread": 0.66,
+   "spread": 1.18,
    "impact10": 0.2,
    "twoWay": "deep",
    "status": "tradeable",
    "name": "Coinbase"
   },
   {
+   "sym": "MSFT",
+   "token": "0xe93237C50D904957Cf27E7B1133b510C669c2e74",
+   "fee": 3000,
+   "spread": 0.4,
+   "impact10": 0.3,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "Microsoft"
+  },
+  {
+   "sym": "MU",
+   "token": "0xfF080c8ce2E5feadaCa0Da81314Ae59D232d4afD",
+   "fee": 10000,
+   "spread": 1.71,
+   "impact10": 0.3,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "Micron"
+  },
+  {
+   "sym": "SPCX",
+   "token": "0x4a0E65A3EcceC6dBe60AE065F2e7bb85Fae35eEa",
+   "fee": 10000,
+   "spread": 0.45,
+   "impact10": 0.4,
+   "twoWay": "deep",
+   "status": "tradeable",
+   "name": "SpaceX"
+  },
+  {
    "sym": "AMZN",
    "token": "0x12f190a9F9d7D37a250758b26824B97CE941bF54",
    "fee": 3000,
-   "spread": 1.4,
-   "impact10": 79.2,
+   "spread": 1.54,
+   "impact10": 78.7,
    "twoWay": "one-side",
    "status": "thin",
    "name": "Amazon"
-  },
-  {
-   "sym": "AMD",
-   "token": "0x86923f96303D656E4aa86D9d42D1e57ad2023fdC",
-   "fee": 10000,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "dead",
-   "name": "AMD"
-  },
-  {
-   "sym": "GOOGL",
-   "token": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
-   "name": "Alphabet"
-  },
-  {
-   "sym": "AAPL",
-   "token": "0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
-   "name": "Apple"
   },
   {
    "sym": "QQQ",
@@ -130,26 +150,6 @@
    "twoWay": "none",
    "status": "none",
    "name": "Nasdaq 100 ETF"
-  },
-  {
-   "sym": "MU",
-   "token": "0xfF080c8ce2E5feadaCa0Da81314Ae59D232d4afD",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
-   "name": "Micron"
-  },
-  {
-   "sym": "PLTR",
-   "token": "0x894E1EC2D74FFE5AEF8Dc8A9e84686acCB964F2A",
-   "fee": null,
-   "spread": null,
-   "impact10": null,
-   "twoWay": "none",
-   "status": "none",
-   "name": "Palantir"
   }
  ]
 }
